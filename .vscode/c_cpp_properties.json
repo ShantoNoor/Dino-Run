@@ -1,0 +1,36 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\dev\\SDL2\\i686-w64-mingw32\\include\\SDL2",
+                "C:\\dev\\SDL2\\SDL2_image\\i686-w64-mingw32\\include\\SDL2",
+                "C:\\dev\\SDL2\\SDL2_ttf\\i686-w64-mingw32\\include\\SDL2",
+                "C:\\dev\\SDL2\\SDL2_mixer\\i686-w64-mingw32\\include\\SDL2",
+                "${workspaceFolder}\\src",
+                "${workspaceFolder}"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "browse": {
+                "path": [
+                    "C:\\dev\\SDL2\\i686-w64-mingw32\\include\\SDL2",
+                    "C:\\dev\\SDL2\\SDL2_image\\i686-w64-mingw32\\include\\SDL2",
+                    "C:\\dev\\SDL2\\SDL2_ttf\\i686-w64-mingw32\\include\\SDL2",
+                    "C:\\dev\\SDL2\\SDL2_mixer\\i686-w64-mingw32\\include\\SDL2",
+                    "${workspaceFolder}\\src",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c17",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

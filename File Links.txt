@@ -1,0 +1,11 @@
+-IC:\\dev\\SDL2\\i686-w64-mingw32\\include\\SDL2 -IC:\\dev\\SDL2\\SDL2_image\\i686-w64-mingw32\\include\\SDL2 -IC:\\dev\\SDL2\\SDL2_ttf\\i686-w64-mingw32\\include\\SDL2 -IC:\\dev\\SDL2\\SDL2_mixer\\i686-w64-mingw32\\include\\SDL2 
+
+-LC:\\dev\\SDL2\\i686-w64-mingw32\\lib -LC:\\dev\\SDL2\\SDL2_image\\i686-w64-mingw32\\lib -LC:\\dev\\SDL2\\SDL2_ttf\\i686-w64-mingw32\\lib -LC:\\dev\\SDL2\\SDL2_mixer\\i686-w64-mingw32\\lib 
+
+-lmingw32 -lSDL2main -lSDL2 -lSDL2.dll -lSDL2_image -lSDL2_image.dll -lSDL2_ttf -lSDL2_ttf.dll -lSDL2_mixer -lSDL2_mixer.dll
+
+## Includes
+"C:\\dev\\SDL2\\i686-w64-mingw32\\include\\SDL2",
+"C:\\dev\\SDL2\\SDL2_image\\i686-w64-mingw32\\include\\SDL2",
+"C:\\dev\\SDL2\\SDL2_ttf\\i686-w64-mingw32\\include\\SDL2",
+"C:\\dev\\SDL2\\SDL2_mixer\\i686-w64-mingw32\\include\\SDL2",            
