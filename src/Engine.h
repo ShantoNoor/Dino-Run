@@ -10,6 +10,7 @@
 // #incldue <sstring>
 
 #include "LTexture.h"
+#include "SpriteSheet.h"
 
 class Engine
 {
@@ -41,18 +42,11 @@ private:
     int m_screenWidth, m_screenHeight;
 
 public: // for game 
-    int bg_x;
-    int bg_x2;
-    int bg_v;
+    int bgXscrolling;
+    int bgXscrolling2;
+    int bgXscrollingVelocity;
     LTexture bg;
-
-    LTexture sp;
-    int spHeight = 301;
-    int spWidth = 3460/8;
-    SDL_Rect spClip[8];
-    int spMover = 0;
-
-    SDL_Rect testRec;
+    SpriteSheet sp;
 };
 
 #endif 

@@ -7,6 +7,10 @@ Engine::Engine()
     m_screenWidth = 1280;
     m_screenHeight = 720;
     m_running = true;
+
+	bgXscrollingVelocity = 5;
+	bgXscrolling = 0;
+	bgXscrolling2 = m_screenWidth;
 }
 
 Engine::~Engine()
@@ -92,6 +96,8 @@ void Engine::handleEvents()
         {
             m_running = false;
         }
+
+		sp.input(ev);
     }
 }
 
@@ -101,20 +107,12 @@ void Engine::render()
     SDL_SetRenderDrawColor( m_renderer, 0xFF, 0xFF, 0xFF, 0xFF );
 	SDL_RenderClear( m_renderer );
 
-    // //Render red filled quad
-    // SDL_Rect fillRect = { m_screenWidth / 4, m_screenHeight / 4, m_screenWidth / 2, m_screenHeight / 2 };
-    // SDL_SetRenderDrawColor( m_renderer, 0xFF, 0x00, 0x00, 0xFF );        
-    // SDL_RenderFillRect( m_renderer, &fillRect );
+	//Scrolling Background
+	bg.render(m_renderer, bgXscrolling, 0);
+	bg.render(m_renderer, bgXscrolling2 , 0);
 
-	bg.render(m_renderer, bg_x, 0);
-	bg.render(m_renderer, bg_x2, 0);
-
-	sp.render(m_renderer, 140, 350, &spClip[spMover/ 5]);
-	spMover++;
-	if(spMover > 40) spMover = 0;
-
-	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
-	SDL_RenderDrawRect(m_renderer, &testRec);
+	//Sprite
+	sp.render(m_renderer);
 
     //Update screen
 	SDL_RenderPresent( m_renderer );
@@ -122,34 +120,25 @@ void Engine::render()
 
 void Engine::update()
 {
-	bg_x -= bg_v;
-	bg_x2 -= bg_v;
-	if(bg_x <= -m_screenWidth) bg_x = m_screenWidth;
-	if(bg_x2 <= -m_screenWidth) bg_x2 = m_screenWidth;
+	//bg
+	if(bgXscrolling < -m_screenWidth) bgXscrolling = m_screenWidth - bgXscrollingVelocity;
+	if(bgXscrolling2 < -m_screenWidth) bgXscrolling2 = m_screenWidth - bgXscrollingVelocity;
+	bgXscrolling -= bgXscrollingVelocity;
+	bgXscrolling2 -= bgXscrollingVelocity;
+
+	//sprite
+	sp.update();
 }
 
 void Engine::load()
 {
 	//Loading Background
     bg.loadFromFile(m_renderer, "Assets/bg.png");
-	bg.setWidth(1280);
-	bg.setHeight(720);
-	bg_v = 5;
-	bg_x = 0;
-	bg_x2 = m_screenWidth;
+	bg.setWidth(m_screenWidth);
+	bg.setHeight(m_screenHeight);
 
-	//Loading sprite
-	for(int i = 0; i < 8; i++)
-	{
-		spClip[i].x = spWidth * i;
-		spClip[i].y = 0;
-		spClip[i].h = spHeight;
-		spClip[i].w = spWidth;
-	}
-	sp.loadFromFile(m_renderer, "Assets/Dino_run.png");
-
-	testRec = {140, 350, spWidth, spHeight};
-
+	//Loading Sprite
+	sp.load(m_renderer, "Assets/Dino_Run.png", 8);
 }
 
 void Engine::close()
