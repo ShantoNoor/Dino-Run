@@ -1,7 +1,8 @@
 #include "Engine.h"
-#include "IObject.h"
+#include "Dino.h"
 
 Engine* Engine::s_engine = nullptr;
+Dino* dino = nullptr;
 
 Engine::Engine()
 {
@@ -14,7 +15,8 @@ Engine::Engine()
 
 void Engine::load()
 {
-	
+	Graphics::get()->load("dino", "Assets/Dino_SpriteSheet.png");
+	dino = new Dino(new Properties("dino", 0, 0, 510, 354));
 }
 
 void Engine::handleEvents()
@@ -31,7 +33,7 @@ void Engine::handleEvents()
 
 void Engine::update()
 {
-
+	dino->update(0.0f);
 }
 
 void Engine::render()
@@ -41,7 +43,7 @@ void Engine::render()
 	SDL_RenderClear( m_renderer );
 
 	//Code Here..
-	
+	dino->render();
 
 
     //Update screen

@@ -17,7 +17,7 @@ public:
         this->width = width;
         this->height = height;
         this->flip = flip;
-        this->id = id
+        this->id = id;
     }
     float x, y;
     int width, height;
@@ -25,7 +25,7 @@ public:
     SDL_RendererFlip flip;
 };
 
-class GameObject() : public IObject
+class GameObject : public IObject
 {
 public:
     GameObject(Properties* p) 
@@ -37,14 +37,14 @@ public:
         m_transform = new Transform(p->x, p->y);
     }
     virtual void render() = 0;
-    virtual void update() = 0;
+    virtual void update(float dt) = 0;
     virtual void free() = 0;
 
-protected:
+
     Transform* m_transform;
     int m_width, m_height;
     std::string m_id;
     SDL_RendererFlip m_flip;
-}
+};
 
 #endif

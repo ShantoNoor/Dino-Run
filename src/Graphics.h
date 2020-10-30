@@ -15,6 +15,7 @@ public:
     bool load(std::string id, std::string path, bool setColorKey = false, int r = 0, int g = 0, int b = 0);
     //Renders texture at given point
 	void render(std::string id, int x, int y, bool fullScreen = false, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
+	void renderSprites(std::string id, int x, int y, int width, int height, int row, int frame, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
     void destroy(std::string id);
     void free();
 
