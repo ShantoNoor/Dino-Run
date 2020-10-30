@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "IObject.h"
 
 Engine* Engine::s_engine = nullptr;
 
@@ -13,7 +14,7 @@ Engine::Engine()
 
 void Engine::load()
 {
-
+	
 }
 
 void Engine::handleEvents()
