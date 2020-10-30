@@ -1,24 +1,19 @@
 #include "Engine.h"
 
-Engine* game = nullptr;
-std::string gameName = "Dino Run";
-
 int main(int argc, char* argv[])
 {
-	game = new Engine();
+	Engine::get()->init("Dino Run");
 
-	game->init(gameName.c_str());
+    Engine::get()->load();
 
-    game->load();
-
-	while(game->running())
+	while(Engine::get()->isRunning())
 	{
-		game->handleEvents();
-		game->update();
-		game->render();
+		Engine::get()->handleEvents();
+		Engine::get()->update();
+		Engine::get()->render();
 	}
 
-    game->close();
+    Engine::get()->close();
 
 	return 0;
 }

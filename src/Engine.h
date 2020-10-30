@@ -3,50 +3,40 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <stdio.h>
-#include <string>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-// #incldue <sstring>
+#include <string>
 
-#include "LTexture.h"
-#include "SpriteSheet.h"
+#include "Graphics.h"
 
 class Engine
 {
-public:
     Engine();
-    ~Engine();
-    bool init(const char* title);
-    void load();
-    void render();
-    void update();
-    void handleEvents();
-    void close();
-    bool running();
-
-    //Getters and Setters
-    SDL_Window* getWindow();
-    SDL_Renderer* getRenderer();
-    int getScreenWidth();
-    int getScreenHeight();
-    void setScreenWidth(int width);
-    void setScreenHeight(int height);
-
-
-private:
+    static Engine* s_engine;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
-
+    SDL_Event m_event;
     bool m_running;
     int m_screenWidth, m_screenHeight;
 
-public: // for game 
-    int bgXscrolling;
-    int bgXscrolling2;
-    int bgXscrollingVelocity;
-    LTexture bg;
-    SpriteSheet sp;
+public:
+    bool init(const char* title, int width=-1, int height=-1);
+    void load();
+    void handleEvents();
+    void update();
+    void render();
+    void close();
+
+    //Getters and Setters
+    static Engine* get() { return s_engine = (s_engine != nullptr) ? s_engine : new Engine(); }
+    bool isRunning() { return m_running; }
+    SDL_Window* getWindow() { return m_window; }
+    SDL_Renderer* getRenderer() { return m_renderer; }
+    int getScreenWidth() { return m_screenWidth; }
+    int getScreenHeight() { return m_screenHeight; }
+    void setScreenWidth(int width) { m_screenWidth = width; }
+    void setScreenHeight(int height) { m_screenHeight = height; }
+
 };
 
-#endif 
+#endif

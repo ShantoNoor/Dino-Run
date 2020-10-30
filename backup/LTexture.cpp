@@ -1,4 +1,5 @@
 #include "LTexture.h"
+#include "Engine.h"
 
 LTexture::LTexture()
 {
@@ -14,7 +15,7 @@ LTexture::~LTexture()
 	free();
 }
 
-bool LTexture::loadFromFile( SDL_Renderer* renderer, std::string path )
+bool LTexture::loadFromFile( std::string path )
 {
 	//Get rid of preexisting texture
 	free();
@@ -31,10 +32,10 @@ bool LTexture::loadFromFile( SDL_Renderer* renderer, std::string path )
 	else
 	{
 		//Color key image
-		SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+		// SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
 		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
+        newTexture = SDL_CreateTextureFromSurface( Engine::get()->getRenderer(), loadedSurface );
 		if( newTexture == nullptr )
 		{
 			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
@@ -85,10 +86,11 @@ void LTexture::setAlpha( Uint8 alpha )
 	SDL_SetTextureAlphaMod( m_texture, alpha );
 }
 
-void LTexture::render( SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+void LTexture::render( int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
 	//Set rendering space and render to screen
-	SDL_Rect renderQuad = { x, y, m_width, m_height };
+	// SDL_Rect renderQuad = { x, y, m_width, m_height };
+	SDL_Rect renderQuad = { x, y, Engine::get()->getScreenWidth(), Engine::get()->getScreenWidth() };
 
 	//Set clip rendering dimensions
 	if( clip != nullptr )
@@ -98,7 +100,7 @@ void LTexture::render( SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, dou
 	}
 
 	//Render to screen
-	SDL_RenderCopyEx( renderer, m_texture, clip, &renderQuad, angle, center, flip );
+	SDL_RenderCopyEx( Engine::get()->getRenderer(), m_texture, clip, &renderQuad, angle, center, flip );
 }
 
 int LTexture::getWidth()

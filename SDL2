@@ -13,7 +13,7 @@ debug_build:
 debug_run:
 	title Debug Run && cd bin && cls && title main-d.exe && main-d.exe
 debug_build_and_run:
-	title Debug Build and Run && mingw32-make -f SDL2 debug_build && mingw32-make -f SDL2 debug_run
+	title Debug Build and Run && mingw32-make -f SDL2 debug_build && echo. && echo. && pause && mingw32-make -f SDL2 debug_run
 
 
 #RELEASE
