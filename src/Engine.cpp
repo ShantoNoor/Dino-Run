@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Dino.h"
+#include "Input.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
@@ -21,19 +22,16 @@ void Engine::load()
 
 void Engine::handleEvents()
 {
-    while(SDL_PollEvent(&m_event) != 0)
-    {
-        //User requests quit
-        if( m_event.type == SDL_QUIT )
-        {
-            m_running = false;
-        }
-    }
+    Input::get()->listen();
 }
 
 void Engine::update()
 {
 	dino->update(0.0f);
+	if(Input::get()->getKeyDown(SDL_SCANCODE_A))
+	{
+		SDL_Log("A pushed!\n");
+	}
 }
 
 void Engine::render()

@@ -17,8 +17,9 @@ void Dino::render()
 
 void Dino::update(float dt)
 {
-    m_physics->update(0.1);
     m_animation->update();
+    m_physics->applyForce(Vector2d(10, 0));
+    m_physics->update(0.5);
     m_transform->translate(m_physics->getPosition());
 }
 

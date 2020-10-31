@@ -15,7 +15,6 @@ class Engine
     static Engine* s_engine;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
-    SDL_Event m_event;
     bool m_running;
     int m_screenWidth, m_screenHeight;
 
@@ -36,6 +35,7 @@ public:
     int getScreenHeight() { return m_screenHeight; }
     void setScreenWidth(int width) { m_screenWidth = width; }
     void setScreenHeight(int height) { m_screenHeight = height; }
+    void quit(){ m_running = false; }
 
 };
 
