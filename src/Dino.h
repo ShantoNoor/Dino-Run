@@ -7,15 +7,14 @@
 
 class Dino : public Charecter
 {
+    Animation* m_animation;
+    Physics* m_physics;
+    
 public:
     Dino(Properties* p);
     virtual void render();
     virtual void update(float dt);
     virtual void free();
-
-private:
-    Animation* m_animation;
-    Physics* m_physics;
 
 };
 

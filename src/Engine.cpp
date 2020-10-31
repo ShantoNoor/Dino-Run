@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Dino.h"
 #include "Input.h"
+#include "Timer.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
@@ -27,11 +28,7 @@ void Engine::handleEvents()
 
 void Engine::update()
 {
-	dino->update(0.0f);
-	if(Input::get()->getKeyDown(SDL_SCANCODE_A))
-	{
-		SDL_Log("A pushed!\n");
-	}
+	dino->update(Timer::get()->getDeltaTime());
 }
 
 void Engine::render()
@@ -136,4 +133,3 @@ bool Engine::init(const char* title, int width, int height)
 
 	return m_running = success;
 }
-

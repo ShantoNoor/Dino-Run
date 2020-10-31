@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Timer.h"
 
 int main(int argc, char* argv[])
 {
@@ -11,6 +12,7 @@ int main(int argc, char* argv[])
 		Engine::get()->handleEvents();
 		Engine::get()->update();
 		Engine::get()->render();
+		Timer::get()->tick();
 	}
 
     Engine::get()->close();

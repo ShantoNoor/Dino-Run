@@ -1,7 +1,7 @@
 #include "Animation.h"
 #include "Graphics.h"
 
-Animation::Animation(std::string id, int spriteRow, int totalFrame, int animationSpeed, SDL_RendererFlip flip)
+void Animation::set(std::string id, int spriteRow, int totalFrame, int animationSpeed, SDL_RendererFlip flip)
 {
     m_spriteRow = spriteRow;
     m_animationSpeed = animationSpeed;

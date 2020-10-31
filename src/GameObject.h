@@ -36,15 +36,16 @@ public:
         m_flip = p->flip;
         m_transform = new Transform(p->x, p->y);
     }
-    virtual void render() = 0;
-    virtual void update(float dt) = 0;
-    virtual void free() = 0;
-
 
     Transform* m_transform;
     int m_width, m_height;
     std::string m_id;
     SDL_RendererFlip m_flip;
+
+    virtual void render() = 0;
+    virtual void update(float dt) = 0;
+    virtual void free() = 0;
+
 };
 
 #endif

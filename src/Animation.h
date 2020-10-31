@@ -11,7 +11,8 @@ class Animation
     SDL_RendererFlip m_flip;
 
 public:
-    Animation(std::string id, int spriteRow, int totalFrame, int animationSpeed, SDL_RendererFlip flip = SDL_FLIP_NONE);
+    Animation() {};
+    void set(std::string id, int spriteRow, int totalFrame, int animationSpeed, SDL_RendererFlip flip = SDL_FLIP_NONE);
     void update();
     void render(int x, int y, int spriteWidth, int spriteHeight);
 
