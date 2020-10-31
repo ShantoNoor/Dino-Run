@@ -6,19 +6,20 @@
 
 Dino::Dino(Properties* p) : Charecter(p)
 {
-    m_row = 4;
-    m_frameCount = 10; 
-    m_animationSpeed = 60;
+    m_animation = new Animation(m_id, 4, 10, 60);
+    m_physics = new Physics();
 }
 
 void Dino::render()
 {
-    Graphics::get()->renderSprites(m_id, m_transform->x, m_transform->y, m_width, m_height, m_row, m_frame);
+    m_animation->render(m_transform->x, m_transform->y, m_width, m_height);
 }
 
 void Dino::update(float dt)
 {
-    m_frame = (SDL_GetTicks() / m_animationSpeed) % m_frameCount;
+    m_physics->update(0.1);
+    m_animation->update();
+    m_transform->translate(m_physics->getPosition());
 }
 
 void Dino::free()

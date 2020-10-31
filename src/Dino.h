@@ -2,17 +2,20 @@
 #define __Dino__
 
 #include "Charecter.h"
+#include "Animation.h"
+#include "Physics.h"
 
 class Dino : public Charecter
 {
 public:
     Dino(Properties* p);
-    void render();
-    void update(float dt);
-    void free();
+    virtual void render();
+    virtual void update(float dt);
+    virtual void free();
 
 private:
-    int m_row, m_frame, m_frameCount, m_animationSpeed;
+    Animation* m_animation;
+    Physics* m_physics;
 
 };
 

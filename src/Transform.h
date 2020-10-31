@@ -8,7 +8,7 @@ class Transform
 public:
     float x, y;
     Transform(float x = 0, float y = 0) { this->x = x; this->y = y; }
-    inline void Translate(Vector2d v) { x + v.x; y + v.y; }
+    inline void translate(Vector2d v) { x += v.x; y += v.y; }
 
 };
 

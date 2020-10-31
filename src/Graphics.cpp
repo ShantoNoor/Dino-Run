@@ -76,7 +76,7 @@ void Graphics::render( std::string id, int x, int y, bool fullScreen, SDL_Rect* 
 	SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], clip, &renderQuad, angle, center, flip );
 }
 
-void Graphics::renderSprites( std::string id, int x, int y, int width, int height, int row, int frame, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+void Graphics::renderSprites( std::string id, int x, int y, int width, int height, int row, int frame, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
     SDL_Rect srcRect = {width*frame, height*row, width, height};
     SDL_Rect desRect = {x, y, width, height};
