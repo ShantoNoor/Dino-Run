@@ -35,6 +35,8 @@ void Dino::update(float dt)
     }
     m_physics->update(0.5);
     m_transform->translateX(m_physics->getPosition());
+    m_origin->x = m_transform->x + m_width / 2;
+    m_origin->y = m_transform->y + m_height / 2;
     m_animation->update();
 }
 

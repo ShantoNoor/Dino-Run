@@ -1,5 +1,6 @@
 #include "Graphics.h"
 #include "Engine.h"
+#include "Camera.h"
 
 Graphics* Graphics::s_graphics = nullptr;
 
@@ -79,9 +80,18 @@ void Graphics::render( std::string id, int x, int y, bool fullScreen, SDL_Rect* 
 void Graphics::renderSprites( std::string id, int x, int y, int width, int height, int row, int frame, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
     SDL_Rect srcRect = {width*frame, height*row, width, height};
-    SDL_Rect desRect = {x, y, width, height};
+    Vector2d cam = Camera::get()->getPosition();
+    SDL_Rect desRect = {x - (int)cam.x, y - (int)cam.y, width, height};
 	SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], &srcRect, &desRect, angle, center, flip );
 
+}
+
+void Graphics::renderBackground( std::string id, int x, int y, int width, int height, double angle, SDL_Point* center, SDL_RendererFlip flip )
+{
+    SDL_Rect srcRect = {0, 0, width, height};
+    Vector2d cam = Camera::get()->getPosition();
+    SDL_Rect desRect = {x - (int)cam.x, y - (int)cam.y, Engine::get()->getScreenWidth(), Engine::get()->getScreenHeight()};
+	SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], &srcRect, &desRect, angle, center, flip );
 }
 
 void Graphics::destroy(std::string id)

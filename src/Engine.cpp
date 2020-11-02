@@ -2,6 +2,7 @@
 #include "Dino.h"
 #include "Input.h"
 #include "Timer.h"
+#include "Camera.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
@@ -17,8 +18,10 @@ Engine::Engine()
 
 void Engine::load()
 {
+	Graphics::get()->load("bg", "Assets/BG_Png/sky.png");
 	Graphics::get()->load("dino", "Assets/Dino_SpriteSheet.png");
 	dino = new Dino(new Properties("dino", 0, 0, 510, 354));
+	Camera::get()->setTarget(dino->getOrigin());
 }
 
 void Engine::handleEvents()
@@ -29,6 +32,7 @@ void Engine::handleEvents()
 void Engine::update()
 {
 	dino->update(Timer::get()->getDeltaTime());
+	Camera::get()->update(Timer::get()->getDeltaTime());
 }
 
 void Engine::render()
@@ -38,6 +42,7 @@ void Engine::render()
 	SDL_RenderClear( m_renderer );
 
 	//Code Here..
+	Graphics::get()->renderBackground("bg", 0, 0, 1920, 1080);
 	dino->render();
 
 
