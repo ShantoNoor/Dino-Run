@@ -36,10 +36,8 @@ public:
         m_height = p->height;
         m_flip = p->flip;
         m_transform = new Transform(p->x, p->y);
-        m_origin = new Vector2d((p->x + p->width / 2), (p->y + p->height / 2));
     }
 
-    Vector2d* m_origin;
     Transform* m_transform;
     int m_width, m_height;
     std::string m_id;
@@ -48,9 +46,6 @@ public:
     virtual void render() = 0;
     virtual void update(float dt) = 0;
     virtual void free() = 0;
-
-    inline Vector2d* getOrigin() { return m_origin; }
-
 };
 
 #endif

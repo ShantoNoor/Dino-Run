@@ -1,13 +1,30 @@
 #Include and Lib files location:
-INCLUDE = -IC:\\dev\\SDL2\\i686-w64-mingw32\\include\\SDL2 -IC:\\dev\\SDL2\\SDL2_image\\i686-w64-mingw32\\include\\SDL2 -IC:\\dev\\SDL2\\SDL2_ttf\\i686-w64-mingw32\\include\\SDL2 -IC:\\dev\\SDL2\\SDL2_mixer\\i686-w64-mingw32\\include\\SDL2
-LIBRARY = -LC:\\dev\\SDL2\\i686-w64-mingw32\\lib -LC:\\dev\\SDL2\\SDL2_image\\i686-w64-mingw32\\lib -LC:\\dev\\SDL2\\SDL2_ttf\\i686-w64-mingw32\\lib -LC:\\dev\\SDL2\\SDL2_mixer\\i686-w64-mingw32\\lib
-LIB = -lmingw32 -lSDL2main -lSDL2 -lSDL2.dll -lSDL2_image -lSDL2_image.dll -lSDL2_ttf -lSDL2_ttf.dll -lSDL2_mixer -lSDL2_mixer.dll
+
+SDL2_include = C:/dev/SDL2/i686-w64-mingw32/include/SDL2
+SDL2_library = C:/dev/SDL2/i686-w64-mingw32/lib
+SDL2_lib = -lSDL2main -lSDL2 -lSDL2.dll
+
+SDL2_image_include = C:/dev/SDL2/SDL2_image/i686-w64-mingw32/include/SDL2
+SDL2_image_library = C:/dev/SDL2/SDL2_image/i686-w64-mingw32/lib
+SDL2_image_lib = -lSDL2_image -lSDL2_image.dll
+
+SDL2_ttf_include = C:/dev/SDL2/SDL2_ttf/i686-w64-mingw32/include/SDL2
+SDL2_ttf_library = C:/dev/SDL2/SDL2_ttf/i686-w64-mingw32/lib
+SDL2_ttf_lib = -lSDL2_ttf -lSDL2_ttf.dll
+
+SDL2_mixer_include = C:/dev/SDL2/SDL2_mixer/i686-w64-mingw32/include/SDL2
+SDL2_mixer_library = C:/dev/SDL2/SDL2_mixer/i686-w64-mingw32/lib
+SDL2_mixer_lib = -lSDL2_mixer -lSDL2_mixer.dll
+
+INCLUDE = -I$(SDL2_include) -I$(SDL2_image_include) -I$(SDL2_ttf_include) -I$(SDL2_mixer_include)
+LIBRARY = -L$(SDL2_library) -L$(SDL2_image_library) -L$(SDL2_ttf_library) -L$(SDL2_mixer_library)
+LIB =  -lmingw32 $(SDL2_lib) $(SDL2_image_lib) $(SDL2_ttf_lib) $(SDL2_mixer_lib)
 
 #DEBUG
 debug_compile:
-	title Debug Compile && cd obj && del *.o && g++ -std=c++17 -Wall -g $(INCLUDE) -c ..\src\*.cpp
+	title Debug Compile && cd obj && del *.o && g++ -std=c++17 -Wall -g $(INCLUDE) -c ../src/*.cpp
 debug_link:
-	title Debug Link && g++ $(LIBRARY) -o "bin\main-d.exe" "obj\*.o" $(LIB)
+	title Debug Link && g++ $(LIBRARY) -o "bin/main-d.exe" "obj/*.o" $(LIB)
 debug_build:
 	title Debug Build && mingw32-make -f SDL2 debug_compile && mingw32-make -f SDL2 debug_link
 debug_run:
@@ -15,12 +32,11 @@ debug_run:
 debug_build_and_run:
 	title Debug Build and Run && mingw32-make -f SDL2 debug_build && echo. && echo. && pause && mingw32-make -f SDL2 debug_run
 
-
 #RELEASE
 release_compile:
-	title Release Compile && cd obj && del *.o && g++ -std=c++17 -Wall -O3 $(INCLUDE) -c ..\src\*.cpp
+	title Release Compile && cd obj && del *.o && g++ -std=c++17 -Wall -O3 $(INCLUDE) -c ../src/*.cpp
 release_link:
-	title Release Link && g++ $(LIBRARY) -o "bin\main-r.exe" "obj\*.o" $(LIB) -s -mwindows
+	title Release Link && g++ $(LIBRARY) -o "bin/main-r.exe" "obj/*.o" $(LIB) -s -mwindows
 release_build:
 	title Release Build && mingw32-make -f SDL2 release_compile && mingw32-make -f SDL2 release_link
 release_run:
@@ -86,7 +102,7 @@ c3f:
 
 
 copy_sdl_dll:
-	copy "C:\dev\SDL2\i686-w64-mingw32\bin\SDL2.dll" "bin\"
+	copy "C:/dev/SDL2/i686-w64-mingw32/bin/SDL2.dll" "bin/"
 csdll:
 	mingw32-make -f SDL2 copy_sdl_dll
 

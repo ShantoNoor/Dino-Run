@@ -1,8 +1,8 @@
 #include "Dino.h"
 #include "Graphics.h"
 #include "SDL.h"
-
 #include "Input.h"
+#include "Timer.h"
 
 // Dino::Dino() // Idel=10, Dead=8, Run=, Walk=10, 
 
@@ -20,23 +20,22 @@ void Dino::render()
 
 void Dino::update(float dt)
 {
-    m_animation->set(m_id, 3, 10, 100); //idle
+    // m_animation->set(m_id, 3, 10, 100); //idle
+    m_animation->set(m_id, 0, 8, 80);
     m_physics->unSetForce();
+    
+    if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE))
+    {
+        m_physics->applyForce(Vector2d(0, -25));
+        m_animation->set(m_id, 4, 12, 80);
+    }
 
-    if(Input::get()->getKeyDown(SDL_SCANCODE_D))
-    {
-        m_physics->applyForce(Vector2d(10, 0));
-        m_animation->set(m_id, 0, 8, 80);
-    }
-    if(Input::get()->getKeyDown(SDL_SCANCODE_A))
-    {
-        m_physics->applyForce(Vector2d(-10, 0));
-        m_animation->set(m_id, 0, 8, 80, SDL_FLIP_HORIZONTAL);
-    }
-    m_physics->update(0.5);
-    m_transform->translateX(m_physics->getPosition());
-    m_origin->x = m_transform->x + m_width / 2;
-    m_origin->y = m_transform->y + m_height / 2;
+    m_physics->update(Timer::get()->getDeltaTime());
+    m_transform->translate(m_physics->getPosition());
+
+    if(m_transform->y > 420) m_transform->y = 420; 
+    if(m_transform->y < 150) m_transform->y = 150;
+
     m_animation->update();
 }
 
@@ -44,3 +43,18 @@ void Dino::free()
 {
     Graphics::get()->destroy(m_id);
 }
+
+
+// if(Input::get()->getKeyDown(SDL_SCANCODE_D))
+    // {
+    //     m_physics->applyForce(Vector2d(10, 0));
+    //     m_animation->set(m_id, 0, 8, 80);
+    //     m_animation->setFlip(SDL_FLIP_NONE);
+    // }
+    // if(Input::get()->getKeyDown(SDL_SCANCODE_A))
+    // {
+    //     m_physics->applyForce(Vector2d(-10, 0));
+    //     m_animation->set(m_id, 0, 8, 80);
+    //     m_animation->setFlip(SDL_FLIP_HORIZONTAL);
+    // }
+

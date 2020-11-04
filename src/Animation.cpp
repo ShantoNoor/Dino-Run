@@ -1,13 +1,12 @@
 #include "Animation.h"
 #include "Graphics.h"
 
-void Animation::set(std::string id, int spriteRow, int totalFrame, int animationSpeed, SDL_RendererFlip flip)
+void Animation::set(std::string id, int spriteRow, int totalFrame, int animationSpeed)
 {
     m_spriteRow = spriteRow;
     m_animationSpeed = animationSpeed;
     m_totalFrame = totalFrame;
     m_id = id;
-    m_flip = flip;
 }
 
 void Animation::update()

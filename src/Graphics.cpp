@@ -1,6 +1,5 @@
 #include "Graphics.h"
 #include "Engine.h"
-#include "Camera.h"
 
 Graphics* Graphics::s_graphics = nullptr;
 
@@ -49,49 +48,22 @@ bool Graphics::load(std::string id, std::string path, bool setColorKey, int r, i
 	return newTexture != nullptr;
 }
 
-void Graphics::render( std::string id, int x, int y, bool fullScreen, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
-{
-	//Set rendering space and render to screen
-	SDL_Rect renderQuad;
-    renderQuad.x = x;
-    renderQuad.y = y;
-
-    if(fullScreen)
-    {
-        renderQuad.w = Engine::get()->getScreenWidth();
-        renderQuad.h = Engine::get()->getScreenWidth();
-    }
-    else
-    {
-        SDL_QueryTexture(m_textureMap[id], NULL, NULL, &renderQuad.w, &renderQuad.h);
-    }
-
-	//Set clip rendering dimensions
-	if( clip != nullptr )
-	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
-	}
-
-	//Render to screen
-	SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], clip, &renderQuad, angle, center, flip );
-}
-
 void Graphics::renderSprites( std::string id, int x, int y, int width, int height, int row, int frame, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
     SDL_Rect srcRect = {width*frame, height*row, width, height};
-    Vector2d cam = Camera::get()->getPosition();
-    SDL_Rect desRect = {x - (int)cam.x, y - (int)cam.y, width, height};
+    float scale = 0.6f;
+    int sWidth = scale * width;
+    int sHeight = scale * height;
+    SDL_Rect desRect = {x, y, sWidth, sHeight};
 	SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], &srcRect, &desRect, angle, center, flip );
-
 }
 
-void Graphics::renderBackground( std::string id, int x, int y, int width, int height, double angle, SDL_Point* center, SDL_RendererFlip flip )
+void Graphics::renderBackground( std::string id, int x, int y, int width, int height, bool fullScreen, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
     SDL_Rect srcRect = {0, 0, width, height};
-    Vector2d cam = Camera::get()->getPosition();
-    SDL_Rect desRect = {x - (int)cam.x, y - (int)cam.y, Engine::get()->getScreenWidth(), Engine::get()->getScreenHeight()};
-	SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], &srcRect, &desRect, angle, center, flip );
+    SDL_Rect desRect = {x, y, Engine::get()->getScreenWidth(), height};
+    if(fullScreen) desRect.h = Engine::get()->getScreenHeight();
+    SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], &srcRect, &desRect, angle, center, flip );
 }
 
 void Graphics::destroy(std::string id)

@@ -2,10 +2,11 @@
 #include "Dino.h"
 #include "Input.h"
 #include "Timer.h"
-#include "Camera.h"
+#include "Background.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
+Background *sky, *mountains, *plateau, *ground, *plant;
 
 Engine::Engine()
 {
@@ -18,10 +19,20 @@ Engine::Engine()
 
 void Engine::load()
 {
-	Graphics::get()->load("bg", "Assets/BG_Png/sky.png");
+	Graphics::get()->load("sky", "Assets/BG_Png/sky.png");
+	Graphics::get()->load("mountains", "Assets/BG_Png/mountains.png");
+	Graphics::get()->load("plateau", "Assets/BG_Png/plateau.png");
+	Graphics::get()->load("ground", "Assets/BG_Png/ground.png");
+	Graphics::get()->load("plant", "Assets/BG_Png/plant.png");
+
 	Graphics::get()->load("dino", "Assets/Dino_SpriteSheet.png");
-	dino = new Dino(new Properties("dino", 0, 0, 510, 354));
-	Camera::get()->setTarget(dino->getOrigin());
+	dino = new Dino(new Properties("dino", 100, 420, 510, 354));
+
+	sky = new Background("sky", 0, 0, 1920, 1080, 1);
+	mountains = new Background("mountains", 0, 200, 1920, 782, 2);
+	plateau = new Background("plateau", 0, 50, 1920, 751, 3);
+	ground = new Background("ground", 0, 550, 1920, 198, 4);
+	plant = new Background("plant", 0, 560, 1920, 216, 5);
 }
 
 void Engine::handleEvents()
@@ -31,8 +42,13 @@ void Engine::handleEvents()
 
 void Engine::update()
 {
+	sky->update();
+	mountains->update();
+	plateau->update();
+	ground->update();
+	plant->update();
+
 	dino->update(Timer::get()->getDeltaTime());
-	Camera::get()->update(Timer::get()->getDeltaTime());
 }
 
 void Engine::render()
@@ -42,7 +58,16 @@ void Engine::render()
 	SDL_RenderClear( m_renderer );
 
 	//Code Here..
-	Graphics::get()->renderBackground("bg", 0, 0, 1920, 1080);
+	sky->render(true);
+	mountains->render();
+	plateau->render();
+	ground->render();
+	plant->render();
+
+	// SDL_Rect groundBox = {0, 608, Engine::get()->getScreenWidth(), 10};
+	// SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 0);
+	// SDL_RenderDrawRect(Engine::get()->getRenderer(), &groundBox);
+
 	dino->render();
 
 

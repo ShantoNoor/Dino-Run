@@ -6,7 +6,7 @@ const float TARGET_DELTATIME = 1.5f;
 
 class Timer
 {
-    Timer(){};
+    Timer(){ m_lastTime = 0.0f; };
     static Timer* s_timer;
     float m_deltaTime, m_lastTime;
 
