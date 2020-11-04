@@ -4,6 +4,7 @@
 #include "Timer.h"
 #include "Background.h"
 #include "Tree.h"
+#include "CollisionHandler.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
@@ -56,6 +57,12 @@ void Engine::update()
 
 	dino->update(dt);
 	tree->update(dt);
+
+	if(CollisionHandler::get()->checkCollision(dino->getCollider(), tree->getCollider()))
+	{
+		SDL_Log("Collided!\n");
+		Engine::get()->quit();
+	}
 }
 
 void Engine::render()
@@ -74,8 +81,6 @@ void Engine::render()
 	tree->render();
 
 	plant->render();
-
-
 
     //Update screen
 	SDL_RenderPresent( m_renderer );

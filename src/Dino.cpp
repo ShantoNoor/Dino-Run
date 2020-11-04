@@ -3,8 +3,10 @@
 #include "SDL.h"
 #include "Input.h"
 #include "Timer.h"
+#include "Engine.h"
 
-// Dino::Dino() // Idel=10, Dead=8, Run=, Walk=10, 
+#define JUMPTIME 25.0f
+#define JUMPVELOCITY 25.0f
 
 Dino::Dino(Properties* p) : Charecter(p)
 {
@@ -14,11 +16,18 @@ Dino::Dino(Properties* p) : Charecter(p)
     m_isRunning = true;
     m_isFalling = false;
     m_jumpTime = JUMPTIME;
+    m_collider = {(int)(m_transform->x + 12), (int)(m_transform->y + 1), 190, 208};
 }
 
 void Dino::render()
 {
     m_animation->render(m_transform->x, m_transform->y, m_width, m_height);
+
+    // for collider
+    // SDL_Rect dinoBox = {(int)(m_transform->x + 12), (int)(m_transform->y + 1), 190, 208};
+	// SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 255);
+	// SDL_RenderDrawRect(Engine::get()->getRenderer(), &m_collider);
+
 }
 
 void Dino::update(float dt)
@@ -32,12 +41,12 @@ void Dino::update(float dt)
         m_animation->set(m_id, 4, 12, 80);
         m_isRunning = false;
         m_isFalling = true;
-        m_physics->applyForce(Vector2d(0, -23));
+        m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
     }
     else if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE) && m_isFalling && m_jumpTime > 0)
     {
         m_jumpTime -= dt;
-        m_physics->applyForce(Vector2d(0, -23));
+        m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
     }
     else if(m_isFalling && m_transform->y == 420)
     {
@@ -51,7 +60,9 @@ void Dino::update(float dt)
     m_transform->translate(m_physics->getPosition());
 
     if(m_transform->y > 420) m_transform->y = 420; 
-    if(m_transform->y < 150) m_transform->y = 150;
+    if(m_transform->y < 140) m_transform->y = 140;
+
+    m_collider = {(int)(m_transform->x + 12), (int)(m_transform->y + 1), 190, 208};
 
     m_animation->update();
 }

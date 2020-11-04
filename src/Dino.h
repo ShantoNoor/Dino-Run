@@ -4,13 +4,13 @@
 #include "Charecter.h"
 #include "Animation.h"
 #include "Physics.h"
-
-#define JUMPTIME 25.0f
+#include <SDL.h>
 
 class Dino : public Charecter
 {
     Animation* m_animation;
     Physics* m_physics;
+    SDL_Rect m_collider;
 
 public:
     Dino(Properties* p);
@@ -20,6 +20,8 @@ public:
     virtual void render();
     virtual void update(float dt);
     virtual void free();
+
+    SDL_Rect getCollider() { return m_collider; }
 
 };
 
