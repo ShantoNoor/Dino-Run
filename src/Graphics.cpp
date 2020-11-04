@@ -48,6 +48,15 @@ bool Graphics::load(std::string id, std::string path, bool setColorKey, int r, i
 	return newTexture != nullptr;
 }
 
+void Graphics::render( std::string id, int x, int y, int width, int height, float scale, double angle, SDL_Point* center, SDL_RendererFlip flip )
+{
+    SDL_Rect srcRect = {0, 0, width, height};
+    SDL_Rect desRect = {x, y, width, height};
+    desRect.w *= scale;
+    desRect.h *= scale;
+    SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], &srcRect, &desRect, angle, center, flip );
+}
+
 void Graphics::renderSprites( std::string id, int x, int y, int width, int height, int row, int frame, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
     SDL_Rect srcRect = {width*frame, height*row, width, height};

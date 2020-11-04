@@ -3,10 +3,12 @@
 #include "Input.h"
 #include "Timer.h"
 #include "Background.h"
+#include "Tree.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
 Background *sky, *mountains, *plateau, *ground, *plant;
+Tree *tree;
 
 Engine::Engine()
 {
@@ -26,13 +28,16 @@ void Engine::load()
 	Graphics::get()->load("plant", "Assets/BG_Png/plant.png");
 
 	Graphics::get()->load("dino", "Assets/Dino_SpriteSheet.png");
-	dino = new Dino(new Properties("dino", 100, 420, 510, 354));
+	dino = new Dino(new Properties("dino", 140, 420, 510, 354));
 
 	sky = new Background("sky", 0, 0, 1920, 1080, 1);
 	mountains = new Background("mountains", 0, 200, 1920, 782, 2);
 	plateau = new Background("plateau", 0, 50, 1920, 751, 3);
 	ground = new Background("ground", 0, 550, 1920, 198, 4);
 	plant = new Background("plant", 0, 560, 1920, 216, 5);
+
+	Graphics::get()->load("tree", "Assets/Cactus.png");
+	tree = new Tree(new Properties("tree", 1000, 460, 734, 983));
 }
 
 void Engine::handleEvents()
@@ -42,13 +47,15 @@ void Engine::handleEvents()
 
 void Engine::update()
 {
+	float dt = Timer::get()->getDeltaTime();
 	sky->update();
 	mountains->update();
 	plateau->update();
 	ground->update();
 	plant->update();
 
-	dino->update(Timer::get()->getDeltaTime());
+	dino->update(dt);
+	tree->update(dt);
 }
 
 void Engine::render()
@@ -62,13 +69,12 @@ void Engine::render()
 	mountains->render();
 	plateau->render();
 	ground->render();
-	plant->render();
-
-	// SDL_Rect groundBox = {0, 608, Engine::get()->getScreenWidth(), 10};
-	// SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 0);
-	// SDL_RenderDrawRect(Engine::get()->getRenderer(), &groundBox);
 
 	dino->render();
+	tree->render();
+
+	plant->render();
+
 
 
     //Update screen
