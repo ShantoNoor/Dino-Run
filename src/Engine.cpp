@@ -5,6 +5,7 @@
 #include "Background.h"
 #include "Tree.h"
 #include "CollisionHandler.h"
+#include "Sound.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
@@ -39,10 +40,49 @@ void Engine::load()
 
 	Graphics::get()->load("tree", "Assets/Cactus.png");
 	tree = new Tree(new Properties("tree", 1000, 460, 734, 983));
+
+	//Loading Sound...
+	Sound::get()->loadMusic("play", "Assets/BG_Music/play.mp3");
+	Sound::get()->loadMusic("start", "Assets/BG_Music/start.mp3");
+	Sound::get()->loadMusicFX("jump0", "Assets/Music_Fx/jump0.wav");
+	Sound::get()->loadMusicFX("jump1", "Assets/Music_Fx/jump1.wav");
+	Sound::get()->loadMusicFX("runLoop", "Assets/Music_Fx/running_loop.wav");
 }
 
 void Engine::handleEvents()
 {
+	if(Input::get()->getKeyDown(SDL_SCANCODE_A))
+	{
+		Sound::get()->playMusic("play");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_S))
+	{
+		Sound::get()->pauseMusic();
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_D))
+	{
+		Sound::get()->resumeMusic();
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_F))
+	{
+		Sound::get()->stopMusic();
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_W))
+	{
+		Sound::get()->playMusic("start");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_1))
+	{
+		Sound::get()->playMusicFX("jump0");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_2))
+	{
+		Sound::get()->playMusicFX("jump1");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_3))
+	{
+		Sound::get()->playMusicFX("runLoop");
+	}
     Input::get()->listen();
 }
 
@@ -60,8 +100,8 @@ void Engine::update()
 
 	if(CollisionHandler::get()->checkCollision(dino->getCollider(), tree->getCollider()))
 	{
-		SDL_Log("Collided!\n");
-		Engine::get()->quit();
+		SDL_Log("Collided->%f\n", dt);
+		// Engine::get()->quit();
 	}
 }
 
@@ -89,6 +129,7 @@ void Engine::render()
 void Engine::close()
 {
 	Graphics::get()->free();
+	Sound::get()->free();
 
     //Destroy window
 	SDL_DestroyRenderer( m_renderer );
