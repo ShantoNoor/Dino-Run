@@ -19,6 +19,9 @@ Engine::Engine()
     m_screenWidth = 1280;
     m_screenHeight = 720;
     m_running = true;
+	m_playing = false;
+	m_dead = false;
+	m_bg_speed = 3;
 }
 
 void Engine::load()
@@ -32,14 +35,15 @@ void Engine::load()
 	Graphics::get()->load("dino", "Assets/Dino_SpriteSheet.png");
 	dino = new Dino(new Properties("dino", 140, 420, 510, 354));
 
-	sky = new Background("sky", 0, 0, 1920, 1080, 1);
-	mountains = new Background("mountains", 0, 200, 1920, 782, 2);
-	plateau = new Background("plateau", 0, 50, 1920, 751, 3);
-	ground = new Background("ground", 0, 550, 1920, 198, 4);
-	plant = new Background("plant", 0, 560, 1920, 216, 5);
+	sky = new Background("sky", 0, 0, 1920, 1080, m_bg_speed);
+	mountains = new Background("mountains", 0, 200, 1920, 782, 2 * m_bg_speed);
+	plateau = new Background("plateau", 0, 50, 1920, 751, 3 * m_bg_speed);
+	ground = new Background("ground", 0, 550, 1920, 198, 4 * m_bg_speed);
+	plant = new Background("plant", 0, 560, 1920, 216, 5 * m_bg_speed);
 
 	Graphics::get()->load("tree", "Assets/Cactus.png");
-	tree = new Tree(new Properties("tree", 1000, 460, 734, 983));
+	tree = new Tree(new Properties("tree", 1500, 465, 734, 983));
+	tree->setTreeVelocity(4 * m_bg_speed);
 
 	//Loading Sound...
 	Sound::get()->loadMusic("play", "Assets/BG_Music/play.mp3");
@@ -51,37 +55,26 @@ void Engine::load()
 
 void Engine::handleEvents()
 {
-	if(Input::get()->getKeyDown(SDL_SCANCODE_A))
+	if((!m_playing && Input::get()->getKeyDown(SDL_SCANCODE_P))
+		|| (m_dead && Input::get()->getKeyDown(SDL_SCANCODE_R)))
 	{
-		Sound::get()->playMusic("play");
-	}
-	else if(Input::get()->getKeyDown(SDL_SCANCODE_S))
-	{
-		Sound::get()->pauseMusic();
-	}
-	else if(Input::get()->getKeyDown(SDL_SCANCODE_D))
-	{
-		Sound::get()->resumeMusic();
-	}
-	else if(Input::get()->getKeyDown(SDL_SCANCODE_F))
-	{
-		Sound::get()->stopMusic();
-	}
-	else if(Input::get()->getKeyDown(SDL_SCANCODE_W))
-	{
-		Sound::get()->playMusic("start");
-	}
-	else if(Input::get()->getKeyDown(SDL_SCANCODE_1))
-	{
-		Sound::get()->playMusicFX("jump0");
-	}
-	else if(Input::get()->getKeyDown(SDL_SCANCODE_2))
-	{
-		Sound::get()->playMusicFX("jump1");
-	}
-	else if(Input::get()->getKeyDown(SDL_SCANCODE_3))
-	{
-		Sound::get()->playMusicFX("runLoop");
+		m_dead = false;
+		m_bg_speed = 3;
+		sky->set(0, 0, 1920, 1080, m_bg_speed);
+		mountains->set(0, 200, 1920, 782, 2 * m_bg_speed);
+		plateau->set(0, 50, 1920, 751, 3 * m_bg_speed);
+		ground->set(0, 550, 1920, 198, 4 * m_bg_speed);
+		plant->set(0, 560, 1920, 216, 5 * m_bg_speed);
+		tree->reset(1500);
+		tree->setTreeVelocity(4 * m_bg_speed);
+		m_playStartTime = 0;
+
+		if (Input::get()->getKeyDown(SDL_SCANCODE_P)) {
+			m_playing = true;
+		} else if (Input::get()->getKeyDown(SDL_SCANCODE_R)){
+			m_playing = false;
+		}
+		
 	}
     Input::get()->listen();
 }
@@ -89,19 +82,39 @@ void Engine::handleEvents()
 void Engine::update()
 {
 	float dt = Timer::get()->getDeltaTime();
-	sky->update();
-	mountains->update();
-	plateau->update();
-	ground->update();
-	plant->update();
 
 	dino->update(dt);
-	tree->update(dt);
 
-	if(CollisionHandler::get()->checkCollision(dino->getCollider(), tree->getCollider()))
-	{
-		SDL_Log("Collided->%f\n", dt);
-		// Engine::get()->quit();
+
+	if (m_playing) {
+		m_playStartTime++;
+
+		sky->update();
+		mountains->update();
+		plateau->update();
+		ground->update();
+		plant->update();
+
+		tree->update(dt);
+
+		if(CollisionHandler::get()->checkCollision(dino->getCollider(), tree->getCollider()))
+		{
+			SDL_Log("Collided->%f\n", dt);
+			m_playing = false;
+			m_dead = true;
+			dino->setAnimation(DEAD);
+		}
+
+		if ((m_playStartTime % 1200) == 0) {
+			m_bg_speed++;
+			sky->setScrollSpeed(1 * m_bg_speed);
+			mountains->setScrollSpeed(2 * m_bg_speed);
+			plateau->setScrollSpeed(3 * m_bg_speed);
+			ground->setScrollSpeed(4 * m_bg_speed);
+			tree->setTreeVelocity(4 * m_bg_speed);
+			plant->setScrollSpeed(5 * m_bg_speed);
+			dino->m_running = RUNNING;
+		} 
 	}
 }
 
@@ -117,8 +130,8 @@ void Engine::render()
 	plateau->render();
 	ground->render();
 
-	dino->render();
 	tree->render();
+	dino->render();
 
 	plant->render();
 
@@ -165,7 +178,7 @@ bool Engine::init(const char* title, int width, int height)
 		if(height != -1) m_screenHeight = height;
 
 		//Create window
-		m_window = SDL_CreateWindow( "Dino Run", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_screenWidth, m_screenHeight, SDL_WINDOW_SHOWN );
+		m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_screenWidth, m_screenHeight, SDL_WINDOW_SHOWN );
 		if( m_window == NULL )
 		{
 			SDL_Log( "Window could not be created! SDL Error: %s\n", SDL_GetError() );

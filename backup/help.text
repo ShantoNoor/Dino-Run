@@ -237,3 +237,36 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+if(Input::get()->getKeyDown(SDL_SCANCODE_A))
+	{
+		Sound::get()->playMusic("play");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_S))
+	{
+		Sound::get()->pauseMusic();
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_D))
+	{
+		Sound::get()->resumeMusic();
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_F))
+	{
+		Sound::get()->stopMusic();
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_W))
+	{
+		Sound::get()->playMusic("start");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_1))
+	{
+		Sound::get()->playMusicFX("jump0");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_2))
+	{
+		Sound::get()->playMusicFX("jump1");
+	}
+	else if(Input::get()->getKeyDown(SDL_SCANCODE_3))
+	{
+		Sound::get()->playMusicFX("runLoop");
+	}

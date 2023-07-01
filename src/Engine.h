@@ -16,9 +16,12 @@ class Engine
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
     bool m_running;
-    int m_screenWidth, m_screenHeight;
+    int m_screenWidth, m_screenHeight, m_bg_speed;
+    int m_playStartTime;
 
 public:
+    bool m_playing, m_dead;
+
     bool init(const char* title, int width=-1, int height=-1);
     void load();
     void handleEvents();

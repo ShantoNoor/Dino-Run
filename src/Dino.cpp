@@ -8,15 +8,18 @@
 #define JUMPTIME 25.0f
 #define JUMPVELOCITY 25.0f
 
+#define COLLIDER_OFFSET_X 40
+#define COLLIDER_OFFSET_Y 40
+#define COLLIDER_WIDTH 140
+#define COLLIDER_HEIGHT 135
+
 Dino::Dino(Properties* p) : Charecter(p)
 {
     m_animation = new Animation();
-    m_animation->set(m_id, 3, 10, 100); //idle
     m_physics = new Physics();
-    m_isRunning = true;
-    m_isFalling = false;
     m_jumpTime = JUMPTIME;
-    m_collider = {(int)(m_transform->x + 12), (int)(m_transform->y + 1), 190, 208};
+    m_collider = {(int)(m_transform->x + COLLIDER_OFFSET_X), (int)(m_transform->y + COLLIDER_OFFSET_Y), COLLIDER_WIDTH, COLLIDER_HEIGHT};
+    setAnimation(IDLE);
 }
 
 void Dino::render()
@@ -24,36 +27,39 @@ void Dino::render()
     m_animation->render(m_transform->x, m_transform->y, m_width, m_height);
 
     // for collider
-    // SDL_Rect dinoBox = {(int)(m_transform->x + 12), (int)(m_transform->y + 1), 190, 208};
-	// SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 255);
-	// SDL_RenderDrawRect(Engine::get()->getRenderer(), &m_collider);
+	SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 255);
+	SDL_RenderDrawRect(Engine::get()->getRenderer(), &m_collider);
 
 }
 
 void Dino::update(float dt)
 {
-    if(m_isRunning) m_animation->set(m_id, 0, 8, 80);
-
     m_physics->unSetForce();
 
-    if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE) && m_isRunning && m_jumpTime == JUMPTIME)
-    {
-        m_animation->set(m_id, 4, 12, 80);
-        m_isRunning = false;
-        m_isFalling = true;
-        m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
-    }
-    else if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE) && m_isFalling && m_jumpTime > 0)
-    {
-        m_jumpTime -= dt;
-        m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
-    }
-    else if(m_isFalling && m_transform->y == 420)
-    {
-        m_isFalling = false;
-        m_isRunning = true;
-        m_transform->y = 420;
-        m_jumpTime = JUMPTIME;
+    if(Engine::get()->m_dead) {
+        
+    } else {
+        if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE) && m_animationState != JUMPING && m_jumpTime == JUMPTIME)
+        {
+            setAnimation(JUMPING);
+            m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
+        }
+        else if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE) && m_jumpTime > 0)
+        {
+            m_jumpTime -= dt;
+            m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
+        }
+        else if(m_transform->y == 420)
+        {
+            m_transform->y = 420;
+            m_jumpTime = JUMPTIME;
+            if(Engine::get()->m_playing) {
+                setAnimation(m_running);
+            } else {
+                setAnimation(IDLE);
+            }
+        }
+
     }
 
     m_physics->update(dt);
@@ -62,22 +68,34 @@ void Dino::update(float dt)
     if(m_transform->y > 420) m_transform->y = 420; 
     if(m_transform->y < 140) m_transform->y = 140;
 
-    m_collider = {(int)(m_transform->x + 12), (int)(m_transform->y + 1), 190, 208};
-
+    m_collider = {(int)(m_transform->x + COLLIDER_OFFSET_X), (int)(m_transform->y + COLLIDER_OFFSET_Y), COLLIDER_WIDTH, COLLIDER_HEIGHT};
+    
     m_animation->update();
 }
 
-void Dino::free() { }
+void Dino::setAnimation(int animationState) 
+{
+    if (animationState == RUNNING) {
+        m_animation->set(m_id, RUNNING, 8, 90);
+        m_animationState = RUNNING;
+    } else if (animationState == IDLE) {
+        m_animation->set(m_id, IDLE, 10, 90);
+        m_animationState = IDLE;
+    } else if (animationState == WALKING) {
+        m_animation->set(m_id, WALKING, 10, 90);
+        m_animationState = WALKING;
+    } else if (animationState == DEAD) {
+        m_animation->set(m_id, DEAD, 8, 90, true);
+        m_animationState = DEAD;
+    } else if (animationState == JUMPING) {
+        m_animation->set(m_id, JUMPING, 12, 90);
+        m_animationState = JUMPING;
+    }
+}
 
-// if(Input::get()->getKeyDown(SDL_SCANCODE_D))
-    // {
-    //     m_physics->applyForce(Vector2d(10, 0));
-    //     m_animation->set(m_id, 0, 8, 80);
-    //     m_animation->setFlip(SDL_FLIP_NONE);
-    // }
-    // if(Input::get()->getKeyDown(SDL_SCANCODE_A))
-    // {
-    //     m_physics->applyForce(Vector2d(-10, 0));
-    //     m_animation->set(m_id, 0, 8, 80);
-    //     m_animation->setFlip(SDL_FLIP_HORIZONTAL);
-    // }
+int Dino::getAnimationState() 
+{
+    return m_animationState;
+}
+
+void Dino::free() { }

@@ -13,6 +13,15 @@ Background::Background(std::string id, int x, int y, int width, int height, int 
     m_scrollSpeed = scrollSpeed;
 }
 
+void Background::set(int x, int y, int width, int height, int scrollSpeed) {
+    m_x = x;
+    m_x2 = x + Engine::get()->getScreenWidth();
+    m_y = y;
+    m_width = width;
+    m_height = height;
+    m_scrollSpeed = scrollSpeed;
+}
+
 void Background::update()
 {
     m_x -= m_scrollSpeed;
@@ -26,4 +35,8 @@ void Background::render(bool fullScreen)
 {
     Graphics::get()->renderBackground(m_id, m_x, m_y, m_width, m_height, fullScreen);
     Graphics::get()->renderBackground(m_id, m_x2, m_y, m_width, m_height, fullScreen);
+}
+
+void Background::setScrollSpeed(int newScrollSpeed) {
+    m_scrollSpeed = newScrollSpeed;
 }

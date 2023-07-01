@@ -6,20 +6,30 @@
 #include "Physics.h"
 #include <SDL.h>
 
+#define RUNNING 0
+#define DEAD 1
+#define WALKING 2
+#define IDLE 3
+#define JUMPING 4
+
 class Dino : public Charecter
 {
-    Animation* m_animation;
     Physics* m_physics;
     SDL_Rect m_collider;
+    Animation* m_animation;
+    int m_animationState;
 
 public:
     Dino(Properties* p);
     float m_jumpTime;
-    bool m_isRunning;
-    bool m_isFalling;
     virtual void render();
     virtual void update(float dt);
     virtual void free();
+
+    int m_running = WALKING;
+
+    void setAnimation(int animationState);
+    int getAnimationState();
 
     SDL_Rect getCollider() { return m_collider; }
 };
