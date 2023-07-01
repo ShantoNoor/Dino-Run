@@ -15,17 +15,13 @@ class Sound
 public:
     bool loadMusic(std::string id, std::string path);
     bool loadMusicFX(std::string id, std::string path);
-
+    
     void playMusic(std::string id);
     void pauseMusic();
     void resumeMusic();
     void stopMusic();
 
     void playMusicFX(std::string id);
-
-    void destroyMusic(std::string id);
-    void destroyMusicFX(std::string id);
-    void free();
 
     //getters and setters
     static Sound* get() { return s_sound = (s_sound != nullptr) ? s_sound : new Sound(); }

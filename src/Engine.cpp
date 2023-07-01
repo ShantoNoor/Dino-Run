@@ -128,9 +128,6 @@ void Engine::render()
 
 void Engine::close()
 {
-	Graphics::get()->free();
-	Sound::get()->free();
-
     //Destroy window
 	SDL_DestroyRenderer( m_renderer );
 	SDL_DestroyWindow( m_window );
@@ -138,9 +135,9 @@ void Engine::close()
 	m_renderer = nullptr;
 
 	//Quit SDL subsystems
-	Mix_Quit();
-    TTF_Quit();
 	IMG_Quit();
+    TTF_Quit();
+	Mix_Quit();
 	SDL_Quit();
 }
 
@@ -168,7 +165,7 @@ bool Engine::init(const char* title, int width, int height)
 		if(height != -1) m_screenHeight = height;
 
 		//Create window
-		m_window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_screenWidth, m_screenHeight, SDL_WINDOW_SHOWN );
+		m_window = SDL_CreateWindow( "Dino Run", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_screenWidth, m_screenHeight, SDL_WINDOW_SHOWN );
 		if( m_window == NULL )
 		{
 			SDL_Log( "Window could not be created! SDL Error: %s\n", SDL_GetError() );

@@ -67,10 +67,7 @@ void Dino::update(float dt)
     m_animation->update();
 }
 
-void Dino::free()
-{
-    Graphics::get()->destroy(m_id);
-}
+void Dino::free() { }
 
 // if(Input::get()->getKeyDown(SDL_SCANCODE_D))
     // {

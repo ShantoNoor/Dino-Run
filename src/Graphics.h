@@ -17,8 +17,6 @@ public:
     void render( std::string id, int x, int y, int width, int height, float scale = 1, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 	void renderSprites(std::string id, int x, int y, int width, int height, int row, int frame, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE );
     void renderBackground( std::string id, int x, int y, int width, int height, bool fullScreen = false, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-    void destroy(std::string id);
-    void free();
 
     //Getters and Setters
     static Graphics* get(){ return s_graphics = (s_graphics != nullptr) ? s_graphics : new Graphics(); }

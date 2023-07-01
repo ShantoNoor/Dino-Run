@@ -75,18 +75,3 @@ void Graphics::renderBackground( std::string id, int x, int y, int width, int he
     SDL_RenderCopyEx( Engine::get()->getRenderer(), m_textureMap[id], &srcRect, &desRect, angle, center, flip );
 }
 
-void Graphics::destroy(std::string id)
-{
-    SDL_DestroyTexture(m_textureMap[id]);
-    m_textureMap.erase(id);
-}
-
-void Graphics::free()
-{
-    for(auto x : m_textureMap)
-    {
-        destroy(x.first);
-    }
-    m_textureMap.clear();
-}
-

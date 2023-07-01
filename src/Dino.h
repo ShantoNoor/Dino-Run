@@ -22,7 +22,6 @@ public:
     virtual void free();
 
     SDL_Rect getCollider() { return m_collider; }
-
 };
 
 #endif

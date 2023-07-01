@@ -74,32 +74,3 @@ void Sound::playMusicFX(std::string id)
 {
     Mix_PlayChannel( -1, m_musicFXMap[id], 0 );
 }
-
-void Sound::destroyMusic(std::string id)
-{
-    Mix_FreeMusic(m_musicMap[id]);
-    m_musicMap.erase(id);
-}
-
-void Sound::destroyMusicFX(std::string id)
-{
-    Mix_FreeChunk(m_musicFXMap[id]);
-    m_musicFXMap.erase(id);
-}
-
-void Sound::free()
-{
-    //for music
-    for(auto x : m_musicMap)
-    {
-        destroyMusic(x.first);
-    }
-    m_musicMap.clear();
-
-    //for musicFX
-    for(auto x : m_musicFXMap)
-    {
-        destroyMusicFX(x.first);
-    }
-    m_musicFXMap.clear();
-}
