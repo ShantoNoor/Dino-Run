@@ -6,11 +6,13 @@
 #include "Tree.h"
 #include "CollisionHandler.h"
 #include "Sound.h"
+#include "Message.h"
 
 Engine* Engine::s_engine = nullptr;
 Dino* dino = nullptr;
 Background *sky, *mountains, *plateau, *ground, *plant;
 Tree *tree;
+Message tminfo, tmplay, tmhome;
 
 Engine::Engine()
 {
@@ -26,6 +28,20 @@ Engine::Engine()
 
 void Engine::load()
 {
+	//Loading font...
+	Graphics::get()->loadFont("Assets/font.otf", 100);
+
+	//Making textTexture...
+	Graphics::get()->makeTextTexture("t_info", "PRESS SPACE TO JUMP", {171, 235, 52});
+	tminfo.setConfig("t_info");
+
+	Graphics::get()->makeTextTexture("t_play", "PRESS S TO PLAY", {171, 235, 52});
+	tmplay.setConfig("t_play");
+
+	Graphics::get()->makeTextTexture("t_home", "PRESS R TO RELOAD", {171, 235, 52});
+	tmhome.setConfig("t_home");
+
+	//Loading images...
 	Graphics::get()->load("sky", "Assets/BG_Png/sky.png");
 	Graphics::get()->load("mountains", "Assets/BG_Png/mountains.png");
 	Graphics::get()->load("plateau", "Assets/BG_Png/plateau.png");
@@ -55,7 +71,7 @@ void Engine::load()
 
 void Engine::handleEvents()
 {
-	if((!m_playing && Input::get()->getKeyDown(SDL_SCANCODE_P))
+	if((!m_playing && Input::get()->getKeyDown(SDL_SCANCODE_S))
 		|| (m_dead && Input::get()->getKeyDown(SDL_SCANCODE_R)))
 	{
 		m_dead = false;
@@ -69,7 +85,7 @@ void Engine::handleEvents()
 		tree->setTreeVelocity(4 * m_bg_speed);
 		m_playStartTime = 0;
 
-		if (Input::get()->getKeyDown(SDL_SCANCODE_P)) {
+		if (Input::get()->getKeyDown(SDL_SCANCODE_S)) {
 			m_playing = true;
 		} else if (Input::get()->getKeyDown(SDL_SCANCODE_R)){
 			m_playing = false;
@@ -85,7 +101,6 @@ void Engine::update()
 
 	dino->update(dt);
 
-
 	if (m_playing) {
 		m_playStartTime++;
 
@@ -97,7 +112,11 @@ void Engine::update()
 
 		tree->update(dt);
 
-		if(CollisionHandler::get()->checkCollision(dino->getCollider(), tree->getCollider()))
+		if(
+			CollisionHandler::get()->checkCollision(dino->getCollider(), tree->m_collider) ||
+			CollisionHandler::get()->checkCollision(dino->getCollider(), tree->m_collider1) ||
+			CollisionHandler::get()->checkCollision(dino->getCollider(), tree->m_collider2) 
+		)
 		{
 			SDL_Log("Collided->%f\n", dt);
 			m_playing = false;
@@ -135,6 +154,12 @@ void Engine::render()
 	tree->partialRender(0, 0, 490, 0);
 
 	plant->render();
+
+	if (!m_playing) {
+		tminfo.render(700, 30, true);
+		tmplay.render(700, 170, true);
+		if (m_dead) tmhome.render(700, 310, true);
+	}
 
     //Update screen
 	SDL_RenderPresent( m_renderer );

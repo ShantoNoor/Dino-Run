@@ -29,8 +29,8 @@ void Dino::render()
     m_animation->render(m_transform->x, m_transform->y, m_width, m_height);
 
     // for collider
-	SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 255);
-	SDL_RenderDrawRect(Engine::get()->getRenderer(), &m_collider);
+	// SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 255);
+	// SDL_RenderDrawRect(Engine::get()->getRenderer(), &m_collider);
 
 }
 

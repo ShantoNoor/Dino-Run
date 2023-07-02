@@ -8,11 +8,14 @@
 class Tree : public Charecter
 {
     Physics* m_physics;
-    SDL_Rect m_collider;
     float m_treeVelocity;
     float m_scale;
 
 public:
+    SDL_Rect m_collider;
+    SDL_Rect m_collider1;
+    SDL_Rect m_collider2;
+
     Tree(Properties* p, float scale);
     virtual void render();
     virtual void update(float dt);
@@ -21,8 +24,6 @@ public:
     void setTreeVelocity(float newTreeVelocity);
     void reset(float x);
     void partialRender(int xOffset, int yOffset, int widthOffset, int heightOffset);
-
-    SDL_Rect getCollider() { return m_collider; }
 };
 
 #endif
