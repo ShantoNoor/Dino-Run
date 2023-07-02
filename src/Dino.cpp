@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "Timer.h"
 #include "Engine.h"
+#include "Sound.h"
 
 #define JUMPTIME 25.0f
 #define JUMPVELOCITY 25.0f
@@ -31,7 +32,6 @@ void Dino::render()
     // for collider
 	// SDL_SetRenderDrawColor(Engine::get()->getRenderer(), 255, 0, 0, 255);
 	// SDL_RenderDrawRect(Engine::get()->getRenderer(), &m_collider);
-
 }
 
 void Dino::update(float dt)
@@ -43,11 +43,13 @@ void Dino::update(float dt)
         {
             setAnimation(JUMPING);
             m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
+		    Sound::get()->playMusicFX("jump0");
         }
         else if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE) && m_jumpTime > 0)
         {
             m_jumpTime -= dt;
             m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
+		    Sound::get()->playMusicFX("jump0");
         }
         else if(m_transform->y == MAX_Y)
         {
@@ -55,6 +57,7 @@ void Dino::update(float dt)
             m_jumpTime = JUMPTIME;
             if(Engine::get()->m_playing) {
                 setAnimation(m_running);
+		        Sound::get()->playMusicFX("runLoop");
             } else {
                 setAnimation(IDLE);
             }

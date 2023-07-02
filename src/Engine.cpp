@@ -63,10 +63,12 @@ void Engine::load()
 
 	//Loading Sound...
 	Sound::get()->loadMusic("play", "Assets/BG_Music/play.mp3");
-	Sound::get()->loadMusic("start", "Assets/BG_Music/start.mp3");
+	Sound::get()->loadMusic("bg", "Assets/BG_Music/start.mp3");
 	Sound::get()->loadMusicFX("jump0", "Assets/Music_Fx/jump0.wav");
-	Sound::get()->loadMusicFX("jump1", "Assets/Music_Fx/jump1.wav");
+	Sound::get()->loadMusicFX("dead", "Assets/Music_Fx/jump1.wav");
 	Sound::get()->loadMusicFX("runLoop", "Assets/Music_Fx/running_loop.wav");
+
+	Sound::get()->playMusic("bg");
 }
 
 void Engine::handleEvents()
@@ -87,10 +89,13 @@ void Engine::handleEvents()
 
 		if (Input::get()->getKeyDown(SDL_SCANCODE_S)) {
 			m_playing = true;
+			Sound::get()->stopMusic();
+			Sound::get()->playMusic("play");
 		} else if (Input::get()->getKeyDown(SDL_SCANCODE_R)){
 			m_playing = false;
-		}
-		
+			Sound::get()->stopMusic();
+			Sound::get()->playMusic("bg");
+		}	
 	}
     Input::get()->listen();
 }
@@ -122,6 +127,10 @@ void Engine::update()
 			m_playing = false;
 			m_dead = true;
 			dino->setAnimation(DEAD);
+
+		    Sound::get()->playMusicFX("dead");
+			Sound::get()->stopMusic();
+			Sound::get()->playMusic("bg");
 		}
 
 		if ((m_playStartTime % 1200) == 0) {
