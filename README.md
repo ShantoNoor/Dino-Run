@@ -1,5 +1,6 @@
 # Dino Run
 It is a Clone of Google Chrome's T-Rex-Run Game with Good Graphics.
+![Overview](Image.jpeg)
 
 ## Requirements
 - SDL2
