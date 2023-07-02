@@ -13,6 +13,8 @@
 #define COLLIDER_WIDTH 140
 #define COLLIDER_HEIGHT 135
 
+#define MAX_Y 440
+
 Dino::Dino(Properties* p) : Charecter(p)
 {
     m_animation = new Animation();
@@ -36,9 +38,7 @@ void Dino::update(float dt)
 {
     m_physics->unSetForce();
 
-    if(Engine::get()->m_dead) {
-        
-    } else {
+    if(!Engine::get()->m_dead) {
         if(Input::get()->getKeyDown(SDL_SCANCODE_SPACE) && m_animationState != JUMPING && m_jumpTime == JUMPTIME)
         {
             setAnimation(JUMPING);
@@ -49,9 +49,9 @@ void Dino::update(float dt)
             m_jumpTime -= dt;
             m_physics->applyForce(Vector2d(0.0f, -JUMPVELOCITY));
         }
-        else if(m_transform->y == 420)
+        else if(m_transform->y == MAX_Y)
         {
-            m_transform->y = 420;
+            m_transform->y = MAX_Y;
             m_jumpTime = JUMPTIME;
             if(Engine::get()->m_playing) {
                 setAnimation(m_running);
@@ -65,7 +65,7 @@ void Dino::update(float dt)
     m_physics->update(dt);
     m_transform->translate(m_physics->getPosition());
 
-    if(m_transform->y > 420) m_transform->y = 420; 
+    if(m_transform->y > MAX_Y) m_transform->y = MAX_Y; 
     if(m_transform->y < 140) m_transform->y = 140;
 
     m_collider = {(int)(m_transform->x + COLLIDER_OFFSET_X), (int)(m_transform->y + COLLIDER_OFFSET_Y), COLLIDER_WIDTH, COLLIDER_HEIGHT};

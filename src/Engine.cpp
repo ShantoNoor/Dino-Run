@@ -42,7 +42,7 @@ void Engine::load()
 	plant = new Background("plant", 0, 560, 1920, 216, 5 * m_bg_speed);
 
 	Graphics::get()->load("tree", "Assets/Cactus.png");
-	tree = new Tree(new Properties("tree", 1500, 465, 734, 983));
+	tree = new Tree(new Properties("tree", 900, 450, 734, 983), 0.28);
 	tree->setTreeVelocity(4 * m_bg_speed);
 
 	//Loading Sound...
@@ -65,7 +65,7 @@ void Engine::handleEvents()
 		plateau->set(0, 50, 1920, 751, 3 * m_bg_speed);
 		ground->set(0, 550, 1920, 198, 4 * m_bg_speed);
 		plant->set(0, 560, 1920, 216, 5 * m_bg_speed);
-		tree->reset(1500);
+		tree->reset(900);
 		tree->setTreeVelocity(4 * m_bg_speed);
 		m_playStartTime = 0;
 
@@ -132,6 +132,7 @@ void Engine::render()
 
 	tree->render();
 	dino->render();
+	tree->partialRender(0, 0, 490, 0);
 
 	plant->render();
 
